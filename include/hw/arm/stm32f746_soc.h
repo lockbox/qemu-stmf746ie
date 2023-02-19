@@ -38,6 +38,7 @@
 #define TYPE_STM32F746_SOC "stm32f746-soc"
 OBJECT_DECLARE_SIMPLE_TYPE(STM32F746State, STM32F746_SOC)
 
+/* TODO: move more of the hw specs into this header */
 #define STM_NUM_USARTS 7
 #define STM_NUM_TIMERS 4
 #define STM_NUM_ADCS 6
@@ -58,31 +59,31 @@ OBJECT_DECLARE_SIMPLE_TYPE(STM32F746State, STM32F746_SOC)
 #define OTP_SIZE (0x440UL)
 
 struct STM32F746State {
-  /*< private >*/
-  SysBusDevice parent_obj;
-  /*< public >*/
+    /*< private >*/
+    SysBusDevice parent_obj;
+    /*< public >*/
 
-  char *cpu_type;
+    char *cpu_type;
 
-  ARMv7MState armv7m;
+    ARMv7MState armv7m;
 
-  STM32F4xxSyscfgState syscfg;
-  STM32F4xxExtiState exti;
-  STM32F2XXUsartState usart[STM_NUM_USARTS];
-  STM32F2XXTimerState timer[STM_NUM_TIMERS];
-  qemu_or_irq adc_irqs;
-  STM32F2XXADCState adc[STM_NUM_ADCS];
-  STM32F2XXSPIState spi[STM_NUM_SPIS];
+    STM32F4xxSyscfgState syscfg;
+    STM32F4xxExtiState exti;
+    STM32F2XXUsartState usart[STM_NUM_USARTS];
+    STM32F2XXTimerState timer[STM_NUM_TIMERS];
+    qemu_or_irq adc_irqs;
+    STM32F2XXADCState adc[STM_NUM_ADCS];
+    STM32F2XXSPIState spi[STM_NUM_SPIS];
 
-  MemoryRegion otp;
-  MemoryRegion itcm;
-  MemoryRegion dtcm;
-  MemoryRegion sram;
-  MemoryRegion flash;
-  MemoryRegion flash_alias;
+    MemoryRegion otp;
+    MemoryRegion itcm;
+    MemoryRegion dtcm;
+    MemoryRegion sram;
+    MemoryRegion flash;
+    MemoryRegion flash_alias;
 
-  Clock *sysclk;
-  Clock *refclk;
+    Clock *sysclk;
+    Clock *refclk;
 };
 
 #endif

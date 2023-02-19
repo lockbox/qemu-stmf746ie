@@ -1,5 +1,5 @@
 /*
- * Netduino Plus 2 Machine Model
+ * STM32F746IE Machine Model
  *
  * Copyright (c) 2023 lockbox <lockbox.06@protonmail.com>
  *
@@ -34,26 +34,28 @@
 /* Main SYSCLK frequency in Hz (216MHz) */
 #define SYSCLK_FRQ 216000000ULL
 
-static void stm32f746ie_init(MachineState *machine) {
-  DeviceState *dev;
-  Clock *sysclk;
+static void stm32f746ie_init(MachineState *machine)
+{
+    DeviceState *dev;
+    Clock *sysclk;
 
-  /* This clock doesn't need migration because it is fixed-frequency */
-  sysclk = clock_new(OBJECT(machine), "SYSCLK");
-  clock_set_hz(sysclk, SYSCLK_FRQ);
+    /* This clock doesn't need migration because it is fixed-frequency */
+    sysclk = clock_new(OBJECT(machine), "SYSCLK");
+    clock_set_hz(sysclk, SYSCLK_FRQ);
 
-  dev = qdev_new(TYPE_STM32F746_SOC);
-  qdev_prop_set_string(dev, "cpu-type", ARM_CPU_TYPE_NAME("cortex-m7"));
-  qdev_connect_clock_in(dev, "sysclk", sysclk);
-  sysbus_realize_and_unref(SYS_BUS_DEVICE(dev), &error_fatal);
+    dev = qdev_new(TYPE_STM32F746_SOC);
+    qdev_prop_set_string(dev, "cpu-type", ARM_CPU_TYPE_NAME("cortex-m7"));
+    qdev_connect_clock_in(dev, "sysclk", sysclk);
+    sysbus_realize_and_unref(SYS_BUS_DEVICE(dev), &error_fatal);
 
-  armv7m_load_kernel(ARM_CPU(first_cpu), machine->kernel_filename,
-                     FLASH_BASE_ADDRESS, FLASH_SIZE);
+    armv7m_load_kernel(ARM_CPU(first_cpu), machine->kernel_filename,
+                       FLASH_BASE_ADDRESS, FLASH_SIZE);
 }
 
-static void stm32f746ie_machine_init(MachineClass *mc) {
-  mc->desc = "STM32F746IE (Cortex-M7)";
-  mc->init = stm32f746ie_init;
+static void stm32f746ie_machine_init(MachineClass *mc)
+{
+    mc->desc = "STM32F746IE (Cortex-M7)";
+    mc->init = stm32f746ie_init;
 }
 
 DEFINE_MACHINE("STM32F746IE", stm32f746ie_machine_init)
